@@ -6,7 +6,8 @@ class SmAdmin {
 
     this.properties = {
       _authenticated: {
-        type: Boolean
+        type: Boolean,
+        observer: '_authenticatedChanged'
       },
       _notAuthenticated: {
         type: Boolean,
@@ -31,6 +32,12 @@ class SmAdmin {
 
   _computeNotAuthenticated(_authenticated) {
     return !_authenticated;
+  }
+
+  _authenticatedChanged(_authenticated) {
+    if (!_authenticated) {
+      window.location.hash = '';
+    }
   }
 }
 

@@ -25,12 +25,18 @@
             componentFixtures,
             hasElementById = function(id) {
               return !!component.$$('#' + id);
+            },
+            EVENT_TIMEOUT = 0,
+            renderAll = function() {
+              Polymer.dom(component.root).querySelectorAll('template')
+                .forEach(function(template) { template.render(); });
             };
 
         componentFixtures = window.fixtures;
 
         beforeEach(function() {
           component = fixture('default');
+          renderAll();
         });
 
         it('is okay', function() {
@@ -49,23 +55,18 @@
 
         describe('when _authenticated is true', function() {
           beforeEach(function() {
-            component._authenticated = true;
             component._edit = true;
+            component._authenticated = true;
+            renderAll();
           });
 
-          it('should show save and notify', function(done) {
-            setTimeout(function() {
-              expect(hasElementById('save')).to.be.true;
-              expect(hasElementById('notify')).to.be.true;
-              done();
-            }, 0);
+          it('should show save and notify', function() {
+            expect(hasElementById('save')).to.be.true;
+            expect(hasElementById('notify')).to.be.true;
           });
 
-          it('should not show login', function(done) {
-            setTimeout(function() {
-              expect(hasElementById('login')).to.be.false;
-              done();
-            }, 0);
+          it('should not show login', function() {
+            expect(hasElementById('login')).to.be.false;
           });
         });
 
@@ -73,21 +74,16 @@
           beforeEach(function() {
             component._authenticated = false;
             component._edit = true;
+            renderAll();
           });
 
-          it('should not show save and notify', function(done) {
-            setTimeout(function() {
-              expect(hasElementById('save')).to.be.false;
-              expect(hasElementById('notify')).to.be.false;
-              done();
-            }, 0);
+          it('should not show save and notify', function() {
+            expect(hasElementById('save')).to.be.false;
+            expect(hasElementById('notify')).to.be.false;
           });
 
-          it('should show login', function(done) {
-            setTimeout(function() {
-              expect(hasElementById('login')).to.be.true;
-              done();
-            }, 0);
+          it('should show login', function() {
+            expect(hasElementById('login')).to.be.true;
           });
         });
 
@@ -97,21 +93,30 @@
           setTimeout(function() {
             expect(component._edit).to.be.true;
             done();
-          }, 0);
+          }, EVENT_TIMEOUT);
         });
 
-        it('_edit should be true when window.location.hash = "edit"', function(done) {
+        it('_edit should not be true when window.location.hash != "edit"', function(done) {
           window.location.hash = 'noedit';
 
           setTimeout(function() {
             expect(component._edit).to.not.be.true;
             done();
-          }, 0);
+          }, EVENT_TIMEOUT);
         });
 
         it('should be bound to auth.authenticated', function() {
           component.$.auth.authenticated = true;
           expect(component._authenticated).to.be.true;
+        });
+
+        it('should remove #edit when not authenticated', function() {
+          window.location.hash = 'edit';
+
+          component._authenticated = true;
+          component._authenticated = false;
+
+          expect(window.location.hash).to.not.equal('#edit');
         });
       });
     </script>
