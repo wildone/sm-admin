@@ -1,0 +1,43 @@
+{
+  "name": "sm-admin",
+  "description": "Administration for your Simpla site",
+  "version": "0.0.0",
+  "authors": [
+    "Simpla <admin@simpla.io>"
+  ],
+  "license": "MIT",
+  "main": "sm-admin.html",
+  "keywords": [
+    "simpla",
+    "web component",
+    "polymer",
+    "admin"
+  ],
+  "ignore": [
+    "*",
+    "!src/**/*",
+    "!sm-admin.html",
+    "!LICENSE"
+  ],
+  "dependencies": {
+    "webcomponentsjs": "^0.7.14",
+    "polymer": "^1.1.4",
+    "simpla": "git@github.com:simplaio/simpla.git",
+    "sm-module-save": "git@github.com:simplaio/sm-module-save.git",
+    "sm-module-login": "git@github.com:simplaio/sm-module-login.git",
+    "sm-module-notify": "git@github.com:simplaio/sm-module-notify.git",
+    "sm-connect-auth": "git@github.com:simplaio/sm-connect-auth.git"
+  },
+  "devDependencies": {
+    "web-component-tester": "^3.3.22",
+    "test-fixture": "PolymerElements/test-fixture#~1.0.0"
+  },
+  "componentImports": [
+    "polymer/polymer.html",
+    "simpla/simpla.html",
+    "sm-module-login/sm-module-login.html",
+    "sm-module-save/sm-module-save.html",
+    "sm-module-notify/sm-module-notify.html",
+    "sm-connect-auth/sm-connect-auth.html"
+  ]
+}

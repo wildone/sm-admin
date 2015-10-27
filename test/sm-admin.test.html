@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>sm-admin</title>
+    <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../test-fixture/test-fixture-mocha.js"></script>
+    <link rel="import" href="../../test-fixture/test-fixture.html">
+
+    <!-- Import the element to test -->
+    <link rel="import" href="../sm-admin.html">
+    <script src="./sm-admin.fixtures.js"></script>
+  </head>
+  <body>
+    <test-fixture id="default">
+      <template>
+        <sm-admin></sm-admin>
+      </template>
+    </test-fixture>
+    <script>
+      describe('<sm-admin>', function() {
+
+        var component,
+            componentFixtures,
+            hasElementById = function(id) {
+              return !!component.$$('#' + id);
+            };
+
+        componentFixtures = window.fixtures;
+
+        beforeEach(function() {
+          component = fixture('default');
+        });
+
+        it('is okay', function() {
+          expect(component).to.be.ok;
+        });
+
+        it('should not have any items when _edit is false', function() {
+          component._edit = true;
+          component._edit = false;
+          component._authenticated = true;
+          [ 'save', 'login', 'notify' ]
+            .forEach(function(id) {
+              expect(hasElementById(id)).to.be.false;
+            });
+        });
+
+        describe('when _authenticated is true', function() {
+          beforeEach(function() {
+            component._authenticated = true;
+            component._edit = true;
+          });
+
+          it('should show save and notify', function(done) {
+            setTimeout(function() {
+              expect(hasElementById('save')).to.be.true;
+              expect(hasElementById('notify')).to.be.true;
+              done();
+            }, 0);
+          });
+
+          it('should not show login', function(done) {
+            setTimeout(function() {
+              expect(hasElementById('login')).to.be.false;
+              done();
+            }, 0);
+          });
+        });
+
+        describe('when _authenticated is false', function() {
+          beforeEach(function() {
+            component._authenticated = false;
+            component._edit = true;
+          });
+
+          it('should not show save and notify', function(done) {
+            setTimeout(function() {
+              expect(hasElementById('save')).to.be.false;
+              expect(hasElementById('notify')).to.be.false;
+              done();
+            }, 0);
+          });
+
+          it('should show login', function(done) {
+            setTimeout(function() {
+              expect(hasElementById('login')).to.be.true;
+              done();
+            }, 0);
+          });
+        });
+
+        it('_edit should be true when window.location.hash = "edit"', function(done) {
+          window.location.hash = 'edit';
+
+          setTimeout(function() {
+            expect(component._edit).to.be.true;
+            done();
+          }, 0);
+        });
+
+        it('_edit should be true when window.location.hash = "edit"', function(done) {
+          window.location.hash = 'noedit';
+
+          setTimeout(function() {
+            expect(component._edit).to.not.be.true;
+            done();
+          }, 0);
+        });
+
+        it('should be bound to auth.authenticated', function() {
+          component.$.auth.authenticated = true;
+          expect(component._authenticated).to.be.true;
+        });
+      });
+    </script>
+  </body>
+</html>

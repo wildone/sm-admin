@@ -1,0 +1,20 @@
+<dom-module id="sm-admin">
+  <template>
+    <style include="sm-css"></style>
+    <link rel="stylesheet" href="./sm-admin.css" />
+
+    <template is="dom-if" if="{{_edit}}" restamp>
+      <template is="dom-if" if="{{_notAuthenticated}}" restamp>
+        <sm-module-login id="login" class="login"></sm-module-login>
+      </template>
+
+      <template is="dom-if" if="{{_authenticated}}" restamp>
+        <sm-module-save id="save" class="save"></sm-module-save>
+        <sm-module-notify id="notify" class="notify"></sm-module-notify>
+      </template>
+    </template>
+
+    <sm-connect-auth id="auth" authenticated="{{_authenticated}}"></sm-connect-auth>
+  </template>
+  <script src="./sm-admin.js"></script>
+</dom-module>
