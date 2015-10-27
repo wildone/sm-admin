@@ -18,6 +18,11 @@
         <sm-admin></sm-admin>
       </template>
     </test-fixture>
+    <test-fixture id="shared">
+      <template>
+        <sm-helper-share type="state" key="editable"></sm-helper-share>
+      </template>
+    </test-fixture>
     <script>
       describe('<sm-admin>', function() {
 
@@ -117,6 +122,33 @@
           component._authenticated = false;
 
           expect(window.location.hash).to.not.equal('#edit');
+        });
+
+        describe('editable', function() {
+          it('should be bound to shared editable', function() {
+            var shared = fixture('shared');
+            shared.value = false;
+            expect(component._editable).to.be.false;
+
+            shared.value = true;
+            expect(component._editable).to.be.true;
+
+            component._editable = false;
+            expect(shared.value).to.be.false;
+          });
+
+          it('should be true when _authenticated and _edit are both true', function() {
+            expect(component._editable).to.not.be.true;
+
+            component._edit = true;
+            expect(component._editable).to.not.be.true;
+
+            component._authenticated = true;
+            expect(component._editable).to.be.true;
+
+            component._edit = false;
+            expect(component._editable).to.not.be.true;
+          });
         });
       });
     </script>

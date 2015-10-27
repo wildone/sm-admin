@@ -17,8 +17,13 @@ class SmAdmin {
       _edit: {
         type: Boolean,
         value: false
-      }
+      },
+      _editable: Boolean
     };
+
+    this.observers = [
+      '_updateEditable(_authenticated, _edit)'
+    ];
   }
 
   ready() {
@@ -32,6 +37,10 @@ class SmAdmin {
 
   _computeNotAuthenticated(_authenticated) {
     return !_authenticated;
+  }
+
+  _updateEditable(_authenticated, _edit) {
+    this._editable = _authenticated && _edit;
   }
 
   _authenticatedChanged(_authenticated) {

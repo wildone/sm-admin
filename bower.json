@@ -26,7 +26,8 @@
     "sm-module-save": "git@github.com:simplaio/sm-module-save.git",
     "sm-module-login": "git@github.com:simplaio/sm-module-login.git",
     "sm-module-notify": "git@github.com:simplaio/sm-module-notify.git",
-    "sm-connect-auth": "git@github.com:simplaio/sm-connect-auth.git"
+    "sm-connect-auth": "git@github.com:simplaio/sm-connect-auth.git",
+    "sm-helper-share": "git@github.com:simplaio/sm-helper-share.git"
   },
   "devDependencies": {
     "web-component-tester": "^3.3.22",
@@ -38,6 +39,7 @@
     "sm-module-login/sm-module-login.html",
     "sm-module-save/sm-module-save.html",
     "sm-module-notify/sm-module-notify.html",
-    "sm-connect-auth/sm-connect-auth.html"
+    "sm-connect-auth/sm-connect-auth.html",
+    "sm-helper-share/sm-helper-share.html"
   ]
 }
