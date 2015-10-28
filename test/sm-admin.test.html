@@ -23,6 +23,22 @@
         <sm-helper-share type="state" key="editable"></sm-helper-share>
       </template>
     </test-fixture>
+    <test-fixture id="clickTree">
+      <template>
+        <div id="root">
+          <div id="text-wrapper">
+            <simpla-text id="text"></simpla-text>
+          </div>
+          <a id="img-wrapper">
+            <simpla-img id="img"></simpla-img>
+          </a>
+          <div class="has-pointer">
+            <div class="has-pointer"><simpla-img></simpla-img></div>
+            <span class="no-pointer"><a href="#">foo</a></span>
+          </div>
+        </div>
+      </template>
+    </test-fixture>
     <script>
       describe('<sm-admin>', function() {
 
@@ -148,6 +164,90 @@
 
             component._edit = false;
             expect(component._editable).to.not.be.true;
+          });
+        });
+
+        describe('click events', function() {
+          var tree,
+
+              text,
+              textWrapper,
+              textClickListener,
+
+              img,
+              imgWrapper,
+              imgClickListener,
+
+              hasPointers,
+              noPointers;
+
+          beforeEach(function() {
+            tree = fixture('clickTree');
+
+            normalClickListener = sinon.stub();
+            textClickListener = sinon.stub();
+            imgClickListener = sinon.stub();
+
+            text = tree.querySelector('#text');
+            textWrapper = tree.querySelector('#text-wrapper');
+            textWrapper.addEventListener('click', textClickListener);
+
+            img = tree.querySelector('#img');
+            imgWrapper = tree.querySelector('#img-wrapper');
+            imgWrapper.addEventListener('click', imgClickListener);
+
+            hasPointers = [].slice.call(tree.querySelectorAll('.has-pointer'));
+            noPointers = [].slice.call(tree.querySelectorAll('.no-pointer'));
+          });
+
+          it('should work as normal dom when not applied', function() {
+            img.click();
+            expect(imgClickListener.called).to.be.true;
+
+            text.click();
+            expect(textClickListener.called).to.be.true;
+          });
+
+          it('not reach parent elements when click events disabled', function() {
+            component._disableClickEvents(tree);
+
+            img.click();
+            expect(imgClickListener.called).to.be.false;
+
+            text.click();
+            expect(textClickListener.called).to.be.false;
+          });
+
+          it('should completely disable branches without simpla-* inside it', function() {
+            component._disableClickEvents(tree);
+
+            hasPointers.forEach(function(element) {
+              expect(element.style.pointerEvents).to.not.equal('none');
+            });
+
+            noPointers.forEach(function(element) {
+              expect(element.style.pointerEvents).to.equal('none');
+            });
+          });
+
+          it('should reenable as necessary', function() {
+            component._disableClickEvents(tree);
+            component._enableClickEvents(tree);
+
+            hasPointers.forEach(function(element) {
+              expect(element.style.pointerEvents).to.not.equal('none');
+            });
+
+            noPointers.forEach(function(element) {
+              expect(element.style.pointerEvents).to.not.equal('none');
+            });
+
+            // Simpla stuff
+            img.click();
+            expect(imgClickListener.called).to.be.true;
+
+            text.click();
+            expect(textClickListener.called).to.be.true;
           });
         });
       });

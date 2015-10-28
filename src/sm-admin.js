@@ -1,3 +1,5 @@
+import clickEvents from './behaviors/clickEvents';
+
 const EDIT = 'edit';
 
 class SmAdmin {
@@ -23,6 +25,12 @@ class SmAdmin {
 
     this.observers = [
       '_updateEditable(_authenticated, _edit)'
+    ];
+  }
+
+  get behaviors() {
+    return [
+      clickEvents
     ];
   }
 
