@@ -209,6 +209,7 @@
           });
 
           it('not reach parent elements when click events disabled', function() {
+            component._edit = true;
             component._disableClickEvents(tree);
 
             img.click();
@@ -219,6 +220,7 @@
           });
 
           it('should completely disable branches without simpla-* inside it', function() {
+            component._edit = true;
             component._disableClickEvents(tree);
 
             hasPointers.forEach(function(element) {
@@ -248,6 +250,19 @@
 
             text.click();
             expect(textClickListener.called).to.be.true;
+          });
+
+          it('should disable / enable when edit is true / false', function() {
+            sinon.spy(component, '_disableClickEvents');
+            sinon.spy(component, '_enableClickEvents');
+
+            component._edit = true;
+
+            expect(component._disableClickEvents.called).to.be.true;
+            expect(component._enableClickEvents.called).to.be.false;
+
+            component._edit = false;
+            expect(component._enableClickEvents.called).to.be.true;
           });
         });
       });

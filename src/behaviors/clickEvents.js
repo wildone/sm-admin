@@ -55,10 +55,23 @@ function getSimplaElements(root) {
 };
 
 export default {
+  properties: {
+    _clicksDisabled: {
+      type: Boolean,
+      value: false
+    }
+  },
+
+  observers: [
+    '_shouldDisableClicks(_edit, _clicksDisabled)'
+  ],
+
   _disableClickEvents(root) {
     let elements = getSimplaElements(root);
     elements.forEach(stopAllEvents);
     runOnNonSimpla(root, disablePointerEvents);
+
+    this._clicksDisabled = true;
   },
 
   _enableClickEvents(root) {
@@ -66,5 +79,17 @@ export default {
     elements.forEach(el => el._restoreEvents());
 
     runOnNonSimpla(root, enablePointerEvents);
+
+    this._clicksDisabled = false;
+  },
+
+  _shouldDisableClicks(edit, disabled) {
+    const root = document.body;
+
+    if (edit && !disabled) {
+      this._disableClickEvents(root);
+    } else if (!edit && disabled) {
+      this._enableClickEvents(root);
+    }
   }
 };
