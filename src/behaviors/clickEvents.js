@@ -6,7 +6,8 @@ const EVENTS = [
         'touchup',
         'touchdown'
       ],
-      SELECTOR = 'simpla-img, simpla-text';
+      SIMPLA_SELECTOR = 'simpla-img, simpla-text',
+      SM_SELECTOR = 'simpla-img, simpla-text, sm-admin';
 
 function stopEvent(event) {
   event.stopPropagation();
@@ -20,8 +21,8 @@ function stopAllEvents(element) {
 }
 
 function runOnNonSimpla(root, callback) {
-  let hasSimpla = (tree) => tree.querySelectorAll(SELECTOR).length !== 0,
-      isSimpla = (element) => !!element.localName.match(/simpla-*/),
+  let hasSimpla = (tree) => tree.querySelectorAll(SM_SELECTOR).length !== 0,
+      isSimpla = (element) => !!element.localName.match(/simpla-*|sm-/),
       walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT,
         (element) => {
           if (isSimpla(element)) {
@@ -51,7 +52,7 @@ function enablePointerEvents(element) {
 };
 
 function getSimplaElements(root) {
-  return [].slice.call(root.querySelectorAll(SELECTOR));
+  return [].slice.call(root.querySelectorAll(SIMPLA_SELECTOR));
 };
 
 export default {

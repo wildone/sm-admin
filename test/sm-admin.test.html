@@ -34,6 +34,7 @@
           </a>
           <div class="has-pointer">
             <div class="has-pointer"><simpla-img></simpla-img></div>
+            <div class="has-pointer"><sm-admin></sm-admin></div>
             <span class="no-pointer"><a href="#">foo</a></span>
           </div>
         </div>
@@ -224,11 +225,11 @@
             component._disableClickEvents(tree);
 
             hasPointers.forEach(function(element) {
-              expect(element.style.pointerEvents).to.not.equal('none');
+              expect(element.style.pointerEvents).to.not.equal('none', 'Failed on ' + element.localName + '.' + element.className);
             });
 
             noPointers.forEach(function(element) {
-              expect(element.style.pointerEvents).to.equal('none');
+              expect(element.style.pointerEvents).to.equal('none', 'Failed on ' + element.localName + '.' + element.className);
             });
           });
 
