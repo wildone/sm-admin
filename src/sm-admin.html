@@ -10,10 +10,10 @@
 
       <template is="dom-if" if="{{_authenticated}}" restamp>
         <sm-module-save id="save" class="save"></sm-module-save>
-        <sm-module-notify id="notify" class="notify"></sm-module-notify>
       </template>
     </template>
 
+    <sm-module-notify id="notify" class="notify"></sm-module-notify>
     <sm-connect-auth id="auth" token="{{_token}}" authenticated="{{_authenticated}}"></sm-connect-auth>
     <sm-helper-share type="state" key="editable" value="{{_editable}}"></sm-helper-share>
   </template>

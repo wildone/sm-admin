@@ -69,7 +69,7 @@
           component._edit = true;
           component._edit = false;
           component._authenticated = true;
-          [ 'save', 'login', 'notify' ]
+          [ 'save', 'login' ]
             .forEach(function(id) {
               expect(hasElementById(id)).to.be.false;
             });
@@ -84,7 +84,6 @@
 
           it('should show save and notify', function() {
             expect(hasElementById('save')).to.be.true;
-            expect(hasElementById('notify')).to.be.true;
           });
 
           it('should not show login', function() {
@@ -101,7 +100,6 @@
 
           it('should not show save and notify', function() {
             expect(hasElementById('save')).to.be.false;
-            expect(hasElementById('notify')).to.be.false;
           });
 
           it('should show login', function() {
