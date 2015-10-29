@@ -58,4 +58,16 @@ class SmAdmin {
   }
 }
 
+/**
+ * When DOM is ready, inject admin
+ */
+document.addEventListener('DOMContentLoaded', () => {
+  let body,
+      admin;
+
+  body = document.body;
+  admin = document.createElement('sm-admin');
+  body.appendChild(admin);
+});
+
 Polymer(SmAdmin);

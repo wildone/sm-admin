@@ -265,6 +265,13 @@
             expect(component._enableClickEvents.called).to.be.true;
           });
         });
+
+        it('should be injected into the body on ready', function() {
+          var children = [].slice.call(document.body.children),
+              hasAdmin = children.some(function(el) { return el.localName === 'sm-admin'; });
+
+          expect(hasAdmin).to.be.true;
+        });
       });
     </script>
   </body>
