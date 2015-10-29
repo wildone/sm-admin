@@ -20,7 +20,8 @@ class SmAdmin {
         type: Boolean,
         value: false
       },
-      _editable: Boolean
+      _editable: Boolean,
+      _token: String
     };
 
     this.observers = [
@@ -35,12 +36,18 @@ class SmAdmin {
   }
 
   ready() {
+    const updateEditFromHash = () => {
+      this._edit = window.location.hash.split('#').pop() === EDIT;
+    };
+
+
     window.simpla = window.simpla || {};
     window.simpla.notifications = this.$.notify;
+    window.addEventListener('hashchange', updateEditFromHash);
 
-    window.addEventListener('hashchange', () => {
-      this._edit = window.location.hash.split('#').pop() === EDIT;
-    });
+    // Setup state
+    updateEditFromHash();
+    this._token = window.localStorage.getItem('sm-token');
   }
 
   _computeNotAuthenticated(_authenticated) {
