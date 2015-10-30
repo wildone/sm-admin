@@ -271,6 +271,11 @@
 
           expect(hasAdmin).to.be.true;
         });
+
+        it('should hide toolbar when not in edit mode', function() {
+          component._edit = false;
+          expect(component.$.toolbar.hidden).to.be.true;
+        });
       });
     </script>
   </body>

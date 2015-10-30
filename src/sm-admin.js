@@ -45,6 +45,9 @@ class SmAdmin {
     window.simpla.notifications = this.$.notify;
     window.addEventListener('hashchange', updateEditFromHash);
 
+    // Setup singleton instance
+    this._toolbar = this.$.toolbar;
+
     // Setup state
     updateEditFromHash();
     this._token = window.localStorage.getItem('sm-token');

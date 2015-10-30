@@ -13,9 +13,12 @@
       </template>
     </template>
 
+    <sm-helper-toolbar id="toolbar" hidden="{{!_edit}}"></sm-helper-toolbar>
+
     <sm-module-notify id="notify" class="notify"></sm-module-notify>
     <sm-connect-auth id="auth" token="{{_token}}" authenticated="{{_authenticated}}"></sm-connect-auth>
     <sm-helper-share type="state" key="editable" value="{{_editable}}"></sm-helper-share>
+    <sm-helper-share type="singletons" key="toolbar" value="{{_toolbar}}"></sm-helper-share>
   </template>
   <script src="./sm-admin.js"></script>
 </dom-module>
