@@ -1,7 +1,7 @@
 <html><head><meta charset="UTF-8"><link rel="import" href="../sm-helper-toolbar/sm-helper-toolbar.html"><link rel="import" href="../sm-helper-share/sm-helper-share.html"><link rel="import" href="../sm-connect-auth/sm-connect-auth.html"><link rel="import" href="../sm-module-notify/sm-module-notify.html"><link rel="import" href="../sm-module-save/sm-module-save.html"><link rel="import" href="../sm-module-login/sm-module-login.html"><link rel="import" href="../simpla/simpla.html"><link rel="import" href="../polymer/polymer.html"></head><body><dom-module id="sm-admin">
   <template>
     <style include="sm-css"></style>
-    <style>:host{position:relative;z-index:var(--on-top)}.save{position:fixed;top:12px;right:12px}</style>
+    <style>:host *{z-index:var(--on-top)}.save{position:fixed;top:12px;right:12px}</style>
 
     <template is="dom-if" if="{{_edit}}" restamp="">
       <template is="dom-if" if="{{_notAuthenticated}}" restamp="">
