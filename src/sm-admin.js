@@ -61,8 +61,8 @@ class SmAdmin {
     this._editable = _authenticated && _edit;
   }
 
-  _authenticatedChanged(_authenticated) {
-    if (!_authenticated) {
+  _authenticatedChanged(_authenticated, was) {
+    if (was && !_authenticated) {
       window.location.hash = '';
     }
   }
