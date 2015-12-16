@@ -166,6 +166,16 @@
           });
         });
 
+        describe('body meta', function() {
+          it('should have _smMetaData', function() {
+            expect(document.body._smMetaData).to.be.ok;
+          });
+
+          it('should have a uid', function() {
+            expect(document.body._smMetaData.uid).to.be.ok;
+          });
+        });
+
         describe('click events', function() {
           var tree,
 

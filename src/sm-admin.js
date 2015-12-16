@@ -40,6 +40,7 @@ class SmAdmin {
       this._edit = window.location.hash.split('#').pop() === EDIT;
     };
 
+    let bodyMeta;
 
     window.simpla = window.simpla || {};
     window.simpla.notifications = this.$.notify;
@@ -51,6 +52,11 @@ class SmAdmin {
     // Setup state
     updateEditFromHash();
     this._token = window.localStorage.getItem('sm-token');
+
+    // Setup body to take metadata
+    bodyMeta = document.createElement('sm-meta-data');
+    bodyMeta.block = document.body;
+    bodyMeta.uid = encodeURIComponent(simpla.config.baseurl + window.location.pathname);
   }
 
   _computeNotAuthenticated(_authenticated) {
