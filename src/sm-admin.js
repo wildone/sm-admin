@@ -75,18 +75,27 @@ class SmAdmin {
 }
 
 /**
- * When DOM is ready, inject admin
+ * When DOM is ready, inject admin and namespace body
  */
 function inject() {
   let body,
-      admin;
+      admin,
+      namespace;
 
   body = document.body;
+
+  // Namespace
+  namespace = document.createElement('sm-block-namespace');
+  namespace.uid = simpla.config.baseurl.replace('.','\\.');
+  namespace.block = body;
+
+  // Append admin
   admin = document.createElement('sm-admin');
   body.appendChild(admin);
 }
 
 if (document.readyState === 'complete') {
+  namespaceBody();
   inject();
 } else {
   document.addEventListener('DOMContentLoaded', inject);
