@@ -95,7 +95,6 @@ function inject() {
 }
 
 if (document.readyState === 'complete') {
-  namespaceBody();
   inject();
 } else {
   document.addEventListener('DOMContentLoaded', inject);
