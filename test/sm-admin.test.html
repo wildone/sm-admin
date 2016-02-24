@@ -36,11 +36,6 @@
           <a id="img-wrapper">
             <simpla-img id="img"></simpla-img>
           </a>
-          <div class="has-pointer">
-            <div class="has-pointer"><simpla-img></simpla-img></div>
-            <div class="has-pointer"><sm-admin></sm-admin></div>
-            <span class="no-pointer"><a href="#">foo</a></span>
-          </div>
         </div>
       </template>
     </test-fixture>
@@ -189,104 +184,6 @@
           });
         });
 
-        describe('click events', function() {
-          var tree,
-
-              text,
-              textWrapper,
-              textClickListener,
-
-              img,
-              imgWrapper,
-              imgClickListener,
-
-              hasPointers,
-              noPointers;
-
-          beforeEach(function() {
-            tree = fixture('clickTree');
-
-            normalClickListener = sinon.stub();
-            textClickListener = sinon.stub();
-            imgClickListener = sinon.stub();
-
-            text = tree.querySelector('#text');
-            textWrapper = tree.querySelector('#text-wrapper');
-            textWrapper.addEventListener('click', textClickListener);
-
-            img = tree.querySelector('#img');
-            imgWrapper = tree.querySelector('#img-wrapper');
-            imgWrapper.addEventListener('click', imgClickListener);
-
-            hasPointers = [].slice.call(tree.querySelectorAll('.has-pointer'));
-            noPointers = [].slice.call(tree.querySelectorAll('.no-pointer'));
-          });
-
-          it('should work as normal dom when not applied', function() {
-            img.click();
-            expect(imgClickListener.called).to.be.true;
-
-            text.click();
-            expect(textClickListener.called).to.be.true;
-          });
-
-          it('not reach parent elements when click events disabled', function() {
-            component._edit = true;
-            component._disableClickEvents(tree);
-
-            img.click();
-            expect(imgClickListener.called).to.be.false;
-
-            text.click();
-            expect(textClickListener.called).to.be.false;
-          });
-
-          it('should completely disable branches without simpla-* inside it', function() {
-            component._edit = true;
-            component._disableClickEvents(tree);
-
-            hasPointers.forEach(function(element) {
-              expect(element.style.pointerEvents).to.not.equal('none', 'Failed on ' + element.localName + '.' + element.className);
-            });
-
-            noPointers.forEach(function(element) {
-              expect(element.style.pointerEvents).to.equal('none', 'Failed on ' + element.localName + '.' + element.className);
-            });
-          });
-
-          it('should reenable as necessary', function() {
-            component._disableClickEvents(tree);
-            component._enableClickEvents(tree);
-
-            hasPointers.forEach(function(element) {
-              expect(element.style.pointerEvents).to.not.equal('none');
-            });
-
-            noPointers.forEach(function(element) {
-              expect(element.style.pointerEvents).to.not.equal('none');
-            });
-
-            // Simpla stuff
-            img.click();
-            expect(imgClickListener.called).to.be.true;
-
-            text.click();
-            expect(textClickListener.called).to.be.true;
-          });
-
-          it('should disable / enable when edit is true / false', function() {
-            sinon.spy(component, '_disableClickEvents');
-            sinon.spy(component, '_enableClickEvents');
-
-            component._edit = true;
-
-            expect(component._disableClickEvents.called).to.be.true;
-            expect(component._enableClickEvents.called).to.be.false;
-
-            component._edit = false;
-            expect(component._enableClickEvents.called).to.be.true;
-          });
-        });
 
         it('should be injected into the body on ready', function() {
           var children = [].slice.call(document.body.children),
