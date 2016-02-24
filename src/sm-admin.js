@@ -29,12 +29,6 @@ class SmAdmin {
     ];
   }
 
-  get behaviors() {
-    return [
-      clickEvents
-    ];
-  }
-
   ready() {
     const updateEditFromHash = () => {
       this._edit = window.location.hash.split('#').pop() === EDIT;
