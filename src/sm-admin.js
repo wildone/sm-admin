@@ -65,6 +65,9 @@ class SmAdmin {
     if (was && !_authenticated) {
       window.location.hash = '';
     }
+    if (_authenticated) {
+      this.fire('logged-in');
+    }
   }
 }
 
