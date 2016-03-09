@@ -91,7 +91,7 @@ function inject() {
   body.appendChild(admin);
 }
 
-if (document.readyState === 'complete') {
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
   inject();
 } else {
   document.addEventListener('DOMContentLoaded', inject);
