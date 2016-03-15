@@ -165,6 +165,37 @@
           });
         });
 
+        describe('editMode', function() {
+          it('should set _edit to passed value', function() {
+            simpla.editMode(true);
+            expect(component._edit).to.be.true;
+
+            simpla.editMode(false);
+            expect(component._edit).to.be.false;
+          });
+
+          it('should disable hash changes', function() {
+            simpla.editMode(true);
+
+            window.location.hash = 'edit';
+            window.location.hash = 'noedit';
+
+            window.dispatchEvent(new Event('hashchange'));
+
+            expect(component._edit).to.be.true;
+          });
+
+          it('shouldn\t affect the hash on editMode(false)', function() {
+            simpla.editMode(true);
+            window.location.hash = 'noedit';
+            simpla.editMode(false);
+
+            window.dispatchEvent(new Event('hashchange'));
+
+            expect(window.location.hash).to.equal('#noedit');
+          });
+        });
+
         describe('body namespace', function() {
           beforeEach(function(done) {
             if (document.readyState === 'complete' || document.readyState === 'interactive') {

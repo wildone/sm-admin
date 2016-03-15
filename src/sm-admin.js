@@ -1,4 +1,5 @@
 import clickEvents from './behaviors/clickEvents';
+import editMode from './behaviors/editMode';
 
 const EDIT = 'edit';
 
@@ -29,8 +30,13 @@ class SmAdmin {
     ];
   }
 
+  get behaviors() {
+    return [ editMode ];
+  }
+
   ready() {
-    const updateEditFromHash = () => {
+    // Needs to always be scoped to 'this', therefore added in ready
+    this._updateEditFromHash = () => {
       this._edit = window.location.hash.split('#').pop() === EDIT;
     };
 
@@ -38,13 +44,13 @@ class SmAdmin {
 
     window.simpla = window.simpla || {};
     window.simpla.notifications = this.$.notify;
-    window.addEventListener('hashchange', updateEditFromHash);
+    window.addEventListener('hashchange', this._updateEditFromHash);
 
     // Setup singleton instance
     this._toolbar = this.$.toolbar;
 
     // Setup state
-    updateEditFromHash();
+    this._updateEditFromHash();
     this._token = window.localStorage.getItem('sm-token');
 
     // Setup body to take metadata
