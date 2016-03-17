@@ -209,6 +209,10 @@
             expect(document.body._smNamespace).to.be.ok;
           });
 
+          it('should be global', function() {
+            expect(document.body._smNamespace.global).to.be.true;
+          });
+
           it('should have a uid', function() {
             // See simpla.config.baseurl up above in the head
             expect(document.body._smNamespace.uid).to.equal('foo\\.com');
