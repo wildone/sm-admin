@@ -89,7 +89,6 @@ function inject() {
 
   // Namespace
   namespace = document.createElement('sm-block-namespace');
-  namespace.uid = simpla.config.baseurl.replace('.','\\.');
   namespace.global = true;
   namespace.block = body;
 
