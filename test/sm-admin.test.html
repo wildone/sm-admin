@@ -12,7 +12,7 @@
     <link rel="import" href="../sm-admin.html">
     <script src="./sm-admin.fixtures.js"></script>
   </head>
-  <body>
+  <body sid="foo">
     <test-fixture id="default">
       <template>
         <sm-admin></sm-admin>
@@ -207,6 +207,10 @@
 
           it('should be global', function() {
             expect(document.body._smNamespace.global).to.be.true;
+          });
+
+          it('should have sid of body[sid]', function() {
+            expect(document.body._smNamespace.sid).to.equal('foo');
           });
         });
 

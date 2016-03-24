@@ -90,6 +90,7 @@ function inject() {
   // Namespace
   namespace = document.createElement('sm-block-namespace');
   namespace.global = true;
+  namespace.sid = body.getAttribute('sid') || '';
   namespace.block = body;
 
   // Append admin
