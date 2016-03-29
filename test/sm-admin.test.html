@@ -11,12 +11,8 @@
     <!-- Import the element to test -->
     <link rel="import" href="../sm-admin.html">
     <script src="./sm-admin.fixtures.js"></script>
-
-    <script>
-      window.simpla.config.baseurl = 'foo.com';
-    </script>
   </head>
-  <body>
+  <body sid="foo">
     <test-fixture id="default">
       <template>
         <sm-admin></sm-admin>
@@ -213,9 +209,8 @@
             expect(document.body._smNamespace.global).to.be.true;
           });
 
-          it('should have a uid', function() {
-            // See simpla.config.baseurl up above in the head
-            expect(document.body._smNamespace.uid).to.equal('foo\\.com');
+          it('should have sid of body[sid]', function() {
+            expect(document.body._smNamespace.sid).to.equal('foo');
           });
         });
 

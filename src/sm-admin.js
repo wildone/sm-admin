@@ -89,8 +89,9 @@ function inject() {
 
   // Namespace
   namespace = document.createElement('sm-block-namespace');
-  namespace.uid = simpla.config.baseurl.replace('.','\\.');
+  // TODO: In future, this should be changed to gid
   namespace.global = true;
+  namespace.sid = namespace.uid = body.getAttribute('sid') || '';
   namespace.block = body;
 
   // Append admin
