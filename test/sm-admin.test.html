@@ -205,12 +205,22 @@
             expect(document.body._smNamespace).to.be.ok;
           });
 
-          it('should be global', function() {
-            expect(document.body._smNamespace.global).to.be.true;
+          it('should have gid of body[sid] / body[gid]', function() {
+            expect(document.body._smNamespace.gid).to.equal('foo');
           });
 
-          it('should have sid of body[sid]', function() {
-            expect(document.body._smNamespace.sid).to.equal('foo');
+          it('should pass on gid / sid to namespace when set directly', function() {
+            document.body._smNamespace.gid = '';
+
+            document.body.gid = 'bar';
+            expect(document.body._smNamespace.gid).to.equal('bar');
+          });
+
+          it('should alias gid with sid', function() {
+            document.body._smNamespace.gid = '';
+
+            document.body.sid = 'bar';
+            expect(document.body._smNamespace.gid).to.equal('bar');
           });
         });
 
