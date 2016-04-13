@@ -1,6 +1,6 @@
 {
   "name": "sm-admin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Administration for your Simpla site",
   "main": "sm-admin.html",
   "scripts": {
@@ -15,11 +15,11 @@
     "admin"
   ],
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/simplaio/sm-admin.git"
+    "type": "git",
+    "url": "https://github.com/simplaio/sm-admin.git"
   },
   "bugs": {
-    "url" : "https://github.com/simplaio/sm-admin/issues"
+    "url": "https://github.com/simplaio/sm-admin/issues"
   },
   "devDependencies": {
     "autoprefixer": "^6.0.3",
