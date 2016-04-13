@@ -22,14 +22,14 @@
   "dependencies": {
     "webcomponentsjs": "^0.7.14",
     "polymer": "^1.1.4",
-    "sm-ui-core": "https://github.com/SimplaElements/sm-ui-core.git",
-    "sm-module-save": "https://github.com/simplaio/sm-module-save.git",
-    "sm-module-login": "https://github.com/simplaio/sm-module-login.git",
-    "sm-module-notify": "https://github.com/simplaio/sm-module-notify.git",
-    "sm-utility-auth": "https://github.com/simplaio/sm-utility-auth.git",
-    "sm-utility-share": "https://github.com/simplaio/sm-utility-share.git",
-    "sm-ui-toolbar": "https://github.com/simplaio/sm-ui-toolbar.git",
-    "simpla-block": "https://github.com/simplaio/simpla-block.git"
+    "sm-ui-core": "SimplaElements/sm-ui-core#^0.1.0",
+    "sm-module-save": "SimplaElements/sm-module-save#^0.1.0",
+    "sm-module-login": "SimplaElements/sm-module-login#^0.1.0",
+    "sm-module-notify": "SimplaElements/sm-module-notify#^0.1.0",
+    "sm-utility-auth": "SimplaElements/sm-utility-auth#^0.1.0",
+    "sm-utility-share": "SimplaElements/sm-utility-share#^0.1.0",
+    "sm-ui-toolbar": "SimplaElements/sm-ui-toolbar#^0.1.0",
+    "simpla-block": "SimplaElements/simpla-block#^0.1.0"
   },
   "devDependencies": {
     "web-component-tester": "^3.3.22",
