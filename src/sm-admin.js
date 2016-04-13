@@ -86,10 +86,8 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 }
 
 attachConfig({
-  config: {
-    server: API_URL,
-    api: null
-  }
+  server: API_URL,
+  api: null
 });
 
 

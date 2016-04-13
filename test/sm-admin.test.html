@@ -10,7 +10,6 @@
 
     <!-- Import the element to test -->
     <link rel="import" href="../sm-admin.html">
-    <script src="./sm-admin.fixtures.js"></script>
   </head>
   <body sid="foo">
     <test-fixture id="default">
@@ -235,6 +234,10 @@
         it('should hide toolbar when not in edit mode', function() {
           component._edit = false;
           expect(component.$.toolbar.hidden).to.be.true;
+        });
+
+        it('should configure simpla correctly', function() {
+          expect(simpla.config.server).to.equal('https://api.simpla.io');
         });
       });
     </script>
