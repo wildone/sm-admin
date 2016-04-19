@@ -1,103 +1,112 @@
-import gulp from 'gulp';
-import del from 'del';
-import webpack from 'webpack-stream';
-import named from 'vinyl-named';
-import autoprefixer from 'autoprefixer';
-import wct from 'web-component-tester';
-import notify from 'gulp-notify';
-import gulprun from 'run-sequence';
-import vulcanize from 'gulp-vulcanize';
-import gulpif from 'gulp-if';
-import eslint from 'gulp-eslint';
-import postcss from 'gulp-postcss';
-import minify from 'gulp-minify-inline';
-import plumber from 'gulp-plumber';
-import yargs from 'yargs';
-import browserSync from 'browser-sync';
-import { componentImports, name as ELEMENT_NAME } from './bower.json';
-import path from 'path';
+/*eslint one-var: 0 */
 
-const imports = componentImports.map(dep => `../${dep}`),
-      bs = browserSync.create(),
-      argv = yargs.alias('d', 'debug').boolean(['debug']).argv,
+// Core deps
+// Use require() because of rollup babel preset
+const gulp = require('gulp');
+const notify = require('gulp-notify');
+const gulpif = require('gulp-if');
+const size = require('gulp-size');
+const plumber = require('gulp-plumber');
+const rename = require('gulp-rename');
+const gulprun = require('run-sequence');
+const yargs = require('yargs');
+const browserSync = require('browser-sync');
+const wct = require('web-component-tester');
+
+// HTML
+const inline = require('gulp-inline-source');
+const processInline = require('gulp-process-inline');
+const minify = require('gulp-htmlmin');
+
+// JS
+const eslint = require('gulp-eslint');
+const rollup = require('gulp-rollup-file');
+const resolve = require('rollup-plugin-node-resolve');
+const commonJs = require('rollup-plugin-commonjs');
+const babel = require('rollup-plugin-babel');
+
+// CSS
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+
+const bs = browserSync.create(),
+      argv = yargs.boolean(['debug']).argv,
       errorNotifier = () => plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }),
-      options = {
-        webpack: {
-          output: {
-            filename: '[name].js'
-          },
-          module: {
-            loaders: [
-              { test: /\.js$/, loader: 'babel-loader' }
-            ]
-          }
+      OPTIONS = {
+        rollup: {
+          plugins: [
+            resolve({ main: true }),
+            commonJs(),
+            babel()
+          ],
+          format: 'iife'
         },
         postcss: [
           autoprefixer()
         ],
-        vulcanize: {
-          inlineCss: true,
-          inlineScripts: true,
-          addedImports: imports
+        inline: {
+          compress: false,
+          swallowErrors: true
+        },
+        HTMLmin: {
+          removeComments: true,
+          removeCommentsFromCDATA: true,
+          collapseWhitespace: true,
+          conservativeCollapse: true,
+          caseSensitive: true,
+          keepClosingSlash: true,
+          customAttrAssign: [/\$=/],
+          minifyCSS: true,
+          minifyJS: true
         },
         browserSync: {
           server: {
             baseDir: './',
             index: 'demo/index.html',
             routes: {
-              '/': './bower_components',
-              [`/${ELEMENT_NAME}.html`]: `./${ELEMENT_NAME}.html`
+              '/': './bower_components'
             }
           },
-          open: false
+          open: false,
+          notify: false
         }
       };
 
 wct.gulp.init(gulp);
 
-gulp.task('process', () => {
-  return gulp.src(['src/*/*.{html,js,css}', 'src/*.{html,js,css}'])
+gulp.task('build', () => {
+  return gulp.src(['src/*.html'])
           .pipe(errorNotifier())
-            .pipe(gulpif('*.js', named(file => {
-              let name = path.basename(file.path, path.extname(file.path)),
-                  parent = path.basename(path.dirname(file.path));
 
-              return parent === 'src' ? name : path.join(parent, name);
-            })))
+            // Inline styles and scripts
+            .pipe(inline(OPTIONS.inline))
 
-            .pipe(gulpif('*.css', postcss(options.postcss)))
+            // Js
+            .pipe(processInline().extract('script'))
+              .pipe(eslint())
+              .pipe(eslint.format())
+              .pipe(gulpif(!argv.debug, eslint.failAfterError()))
+              .pipe(rollup(OPTIONS.rollup))
+            .pipe(processInline().restore())
 
-            .pipe(gulpif('*.js', eslint()))
-            .pipe(gulpif('*.js', eslint.format()))
-            .pipe(gulpif('*.js', eslint.failAfterError()))
+            // CSS
+            .pipe(processInline().extract('style'))
+              .pipe(postcss(OPTIONS.postcss))
+            .pipe(processInline().restore())
 
-            .pipe(gulpif('*.js', webpack(options.webpack)))
-          .pipe(gulp.dest('.tmp'));
+            // Minify and pipe out
+            .pipe(minify(OPTIONS.HTMLmin))
+            .pipe(rename({ dirname: '' }))
+            .pipe(size({ gzip: true }))
+          .pipe(gulp.dest('.'));
 });
 
-gulp.task('build', ['process'], () => {
-  return gulp.src([`.tmp/${ELEMENT_NAME}/${ELEMENT_NAME}.html`,`.tmp/${ELEMENT_NAME}.html`])
-          .pipe(errorNotifier())
-          .pipe(vulcanize(options.vulcanize))
-          .pipe(gulpif(!argv.debug, minify()))
-        .pipe(gulp.dest('.'));
-});
-
-gulp.task('run', callback => {
-  if (argv.debug) {
-    gulprun('build', callback)
-  } else {
-    gulprun('build', 'clean', callback)
-  }
-});
-
-gulp.task('clean', () => del([ '.tmp' ]));
-
-gulp.task('demo', (callback) => bs.init(options.browserSync));
+gulp.task('demo', (callback) => bs.init(OPTIONS.browserSync));
 
 gulp.task('refresh', () => bs.reload());
 
-gulp.task('test', ['run', 'test:local']);
+gulp.task('test', ['build', 'test:local']);
 
-gulp.task('watch', () => gulp.watch(['src/**/*'], () => gulprun('run', 'refresh')));
-gulp.task('default', ['run', 'demo', 'watch']);
+gulp.task('watch', () => gulp.watch(['src/**/*'], () => gulprun('build', 'refresh')));
+
+gulp.task('default', ['build', 'demo', 'watch']);
