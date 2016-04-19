@@ -21,31 +21,6 @@
         });
       });
 
-      sinon.stub(window, 'setInterval', (function() {
-        var original = window.setInterval;
-        var stubbedInterval = function(callback, time) {
-          var interval = original.call(window, callback, time);
-          stubbedInterval._intervals[interval] = { callback: callback, time: time };
-        };
-
-        stubbedInterval.flush = function() {
-          Object.keys(stubbedInterval._intervals)
-            .forEach(function(interval) {
-              var data = stubbedInterval._intervals[interval],
-                  callback = data.callback,
-                  time = data.time;
-
-              callback();
-              window.clearInterval(interval);
-              window.setInterval(callback, time);
-            });
-        }
-
-        stubbedInterval._intervals = [];
-
-        return stubbedInterval;
-      })());
-
       window.localStorage.removeItem('sm-session');
 
       window.simpla = {
