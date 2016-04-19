@@ -6,10 +6,18 @@ export default function() {
   const { api, server } = simpla.config,
         endpoint = `${server}/projects/${api}/usage`;
 
-  function pingSession() {
+  /**
+   * Ping the server at the usage endpoint
+   * @return {undefined}
+   */
+  function ping() {
     fetch(endpoint, { method: 'POST' });
   }
 
+  /**
+   * Check if user is still within the session time period
+   * @return {Boolean} true if still in session, false otherwise
+   */
   function stillInSession() {
     let expiry = window.localStorage.getItem(SESSION_KEY),
         now = Date.now();
@@ -17,17 +25,24 @@ export default function() {
     return expiry && parseInt(expiry) > now;
   }
 
-  function updateSession() {
+  /**
+   * Update the session to now + interval time
+   * @return {undefined}
+   */
+  function resetSession() {
     window.localStorage.setItem(SESSION_KEY, Date.now() + INTERVAL);
   }
 
+  // If they're not in the session, send a ping to the server
   if (!stillInSession()) {
-    pingSession();
+    ping();
   }
 
-  updateSession();
+  // Reset the session token
+  resetSession();
 
+  // When they leave the site, reset the session token
   window.addEventListener('beforeunload', function() {
-    updateSession();
+    resetSession();
   });
 }
