@@ -8,6 +8,26 @@
     <script src="../../test-fixture/test-fixture-mocha.js"></script>
     <link rel="import" href="../../test-fixture/test-fixture.html">
 
+
+    <script>
+
+      sinon.stub(window, 'fetch', function() {
+        return new Promise(function(resolve, reject) {
+          if (window.fetch._reject) {
+            reject(window.fetch._reject);
+          } else {
+            resolve(window.fetch._resolve);
+          }
+        });
+      });
+
+      window.localStorage.removeItem('sm-session');
+
+      window.simpla = {
+        config: { server: 'https://api.simpla.io', api: 'project-id' }
+      };
+    </script>
+
     <!-- Import the element to test -->
     <link rel="import" href="../sm-admin.html">
   </head>
@@ -49,6 +69,11 @@
             };
 
         componentFixtures = window.fixtures;
+
+        afterEach(function() {
+          window.fetch._resolve = null;
+          window.fetch._reject = null;
+        });
 
         beforeEach(function() {
           component = fixture('default');
@@ -238,6 +263,35 @@
 
         it('should configure simpla correctly', function() {
           expect(simpla.config.server).to.equal('https://api.simpla.io');
+        });
+
+        describe('usage monitoring', function() {
+          var firstCall;
+
+          beforeEach(function() {
+            var call = window.fetch.getCall(0);
+            firstCall = call ? call.args : null;
+          });
+
+          it('should call the right endpoint', function() {
+            var endpoint = simpla.config.server + '/projects/' + simpla.config.api + '/usage';
+            expect(firstCall[0]).to.equal(endpoint);
+          });
+
+          it('should call endpoint with POST method', function() {
+            expect(firstCall[1].method).to.equal('POST');
+          });
+
+          it('should set a new token in localStorage', function() {
+            expect(window.localStorage.getItem('sm-session')).to.be.ok;
+          });
+
+          it('should update the token on beforeunload', function() {
+            var current = window.localStorage.getItem('sm-session');
+
+            window.dispatchEvent(new Event('beforeunload'));
+            expect(window.localStorage.getItem('sm-session')).not.to.equal(current);
+          });
         });
       });
     </script>

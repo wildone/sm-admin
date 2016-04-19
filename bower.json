@@ -29,21 +29,12 @@
     "sm-utility-auth": "SimplaElements/sm-utility-auth#^0.1.0",
     "sm-utility-share": "SimplaElements/sm-utility-share#^0.1.0",
     "sm-ui-toolbar": "SimplaElements/sm-ui-toolbar#^0.1.0",
-    "simpla-block": "SimplaElements/simpla-block#^0.1.0"
+    "simpla-block": "SimplaElements/simpla-block#^0.1.0",
+    "fetch": "^0.11.0",
+    "es6-promise": "^3.2.1"
   },
   "devDependencies": {
     "web-component-tester": "^3.3.22",
     "test-fixture": "PolymerElements/test-fixture#~1.0.0"
-  },
-  "componentImports": [
-    "polymer/polymer.html",
-    "sm-ui-core/sm-ui-core.html",
-    "sm-module-login/sm-module-login.html",
-    "sm-module-save/sm-module-save.html",
-    "sm-module-notify/sm-module-notify.html",
-    "sm-utility-auth/sm-utility-auth.html",
-    "sm-utility-share/sm-utility-share.html",
-    "sm-ui-toolbar/sm-ui-toolbar.html",
-    "simpla-block/simpla-block.html"
-  ]
+  }
 }

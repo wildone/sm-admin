@@ -1,7 +1,30 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../sm-ui-core/sm-ui-core.html">
+<link rel="import" href="../sm-module-login/sm-module-login.html">
+<link rel="import" href="../sm-module-save/sm-module-save.html">
+<link rel="import" href="../sm-module-notify/sm-module-notify.html">
+<link rel="import" href="../sm-utility-auth/sm-utility-auth.html">
+<link rel="import" href="../sm-utility-share/sm-utility-share.html">
+<link rel="import" href="../sm-ui-toolbar/sm-ui-toolbar.html">
+<link rel="import" href="../simpla-block/simpla-block.html">
+
+<script src="../fetch/fetch.js"></script>
+<script src="../es6-promise/es6-promise.min.js"></script>
+
 <dom-module id="sm-admin">
   <template>
     <style include="sm-css"></style>
-    <link rel="stylesheet" href="./sm-admin.css" />
+    <style>
+      :host * {
+        z-index: var(--on-top);
+      }
+
+      .save {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+      }
+    </style>
 
     <template is="dom-if" if="{{_edit}}" restamp>
       <template is="dom-if" if="{{_notAuthenticated}}" restamp>
@@ -20,5 +43,102 @@
     <sm-utility-share type="state" key="editable" value="{{_editable}}"></sm-utility-share>
     <sm-utility-share type="singletons" key="toolbar" value="{{_toolbar}}"></sm-utility-share>
   </template>
-  <script src="./sm-admin.js"></script>
+  <script>
+    import clickEvents from './behaviors/clickEvents';
+    import editMode from './behaviors/editMode';
+    import { attachConfig, inject } from './lib/setup';
+    import startMonitoring from './lib/usageMonitor';
+
+    const EDIT = 'edit',
+          API_URL = 'https://api.simpla.io';
+
+    class SmAdmin {
+      beforeRegister() {
+        this.is = 'sm-admin';
+
+        this.properties = {
+          _authenticated: {
+            type: Boolean,
+            observer: '_authenticatedChanged'
+          },
+          _notAuthenticated: {
+            type: Boolean,
+            computed: '_computeNotAuthenticated(_authenticated)',
+            value: true
+          },
+          _edit: {
+            type: Boolean,
+            value: false
+          },
+          _editable: Boolean,
+          _token: String
+        };
+
+        this.observers = [
+          '_updateEditable(_authenticated, _edit)'
+        ];
+      }
+
+      get behaviors() {
+        return [ editMode ];
+      }
+
+      ready() {
+        // Needs to always be scoped to 'this', therefore added in ready
+        this._updateEditFromHash = () => {
+          this._edit = window.location.hash.split('#').pop() === EDIT;
+        };
+
+        let bodyMeta;
+
+        window.simpla = window.simpla || {};
+        window.simpla.notifications = this.$.notify;
+        window.addEventListener('hashchange', this._updateEditFromHash);
+
+        // Setup singleton instance
+        this._toolbar = this.$.toolbar;
+
+        // Setup state
+        this._updateEditFromHash();
+        this._token = window.localStorage.getItem('sm-token');
+
+        // Setup body to take metadata
+        bodyMeta = document.createElement('sm-meta-data');
+        bodyMeta.block = document.body;
+        bodyMeta.uid = encodeURIComponent(simpla.config.baseurl + window.location.pathname);
+      }
+
+      _computeNotAuthenticated(_authenticated) {
+        return !_authenticated;
+      }
+
+      _updateEditable(_authenticated, _edit) {
+        this._editable = _authenticated && _edit;
+      }
+
+      _authenticatedChanged(_authenticated, was) {
+        if (was && !_authenticated) {
+          window.location.hash = '';
+        }
+        if (_authenticated) {
+          this.fire('logged-in');
+        }
+      }
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      inject();
+    } else {
+      document.addEventListener('DOMContentLoaded', inject);
+    }
+
+    attachConfig({
+      server: API_URL,
+      api: null
+    });
+
+    startMonitoring();
+
+    Polymer(SmAdmin);
+  </script>
 </dom-module>
