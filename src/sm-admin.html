@@ -8,6 +8,9 @@
 <link rel="import" href="../sm-ui-toolbar/sm-ui-toolbar.html">
 <link rel="import" href="../simpla-block/simpla-block.html">
 
+<script src="../fetch/fetch.js"></script>
+<script src="../es6-promise/es6-promise.min.js"></script>
+
 <dom-module id="sm-admin">
   <template>
     <style include="sm-css"></style>
@@ -44,6 +47,7 @@
     import clickEvents from './behaviors/clickEvents';
     import editMode from './behaviors/editMode';
     import { attachConfig, inject } from './lib/setup';
+    import startMonitoring from './lib/usageMonitor';
 
     const EDIT = 'edit',
           API_URL = 'https://api.simpla.io';
@@ -132,6 +136,8 @@
       server: API_URL,
       api: null
     });
+
+    startMonitoring();
 
     Polymer(SmAdmin);
   </script>
