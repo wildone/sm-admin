@@ -48,6 +48,7 @@
     import editMode from './behaviors/editMode';
     import { attachConfig, inject } from './lib/setup';
     import startMonitoring from './lib/usageMonitor';
+    import isValidToken from './lib/isValidToken';
 
     const EDIT = 'edit',
           API_URL = 'https://api.simpla.io';
@@ -89,7 +90,7 @@
           this._edit = window.location.hash.split('#').pop() === EDIT;
         };
 
-        let bodyMeta;
+        let token;
 
         window.simpla = window.simpla || {};
         window.simpla.notifications = this.$.notify;
@@ -100,12 +101,13 @@
 
         // Setup state
         this._updateEditFromHash();
-        this._token = window.localStorage.getItem('sm-token');
+        token = window.localStorage.getItem('sm-token');
 
-        // Setup body to take metadata
-        bodyMeta = document.createElement('sm-meta-data');
-        bodyMeta.block = document.body;
-        bodyMeta.uid = encodeURIComponent(simpla.config.baseurl + window.location.pathname);
+        if (!isValidToken(token)) {
+          window.localStorage.removeItem('sm-token');
+        } else {
+          this._token = token;
+        }
       }
 
       _computeNotAuthenticated(_authenticated) {
