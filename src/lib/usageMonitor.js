@@ -11,7 +11,12 @@ export default function() {
    * @return {undefined}
    */
   function ping() {
-    fetch(endpoint, { method: 'POST' });
+    let elements = document.querySelectorAll('simpla-text, simpla-img').length;
+
+    fetch(endpoint, {
+      method: 'POST',
+      body: JSON.stringify({ elements })
+    });
   }
 
   /**

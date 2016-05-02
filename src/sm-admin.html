@@ -130,16 +130,16 @@
 
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
       inject();
+      startMonitoring();
     } else {
       document.addEventListener('DOMContentLoaded', inject);
+      document.addEventListener('DOMContentLoaded', startMonitoring);
     }
 
     attachConfig({
       server: API_URL,
       api: null
     });
-
-    startMonitoring();
 
     Polymer(SmAdmin);
   </script>

@@ -282,6 +282,11 @@
             expect(firstCall[1].method).to.equal('POST');
           });
 
+          it('should send element count with the body', function() {
+            var body = JSON.parse(firstCall[1].body);
+            expect(body.elements).to.be.defined;
+          });
+
           it('should set a new token in localStorage', function() {
             expect(window.localStorage.getItem('sm-session')).to.be.ok;
           });
