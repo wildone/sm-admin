@@ -1,7 +1,7 @@
 {
   "name": "sm-admin",
   "description": "Administration for your Simpla site",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "authors": [
     "Simpla <admin@simpla.io>"
   ],
