@@ -4,7 +4,7 @@ const SESSION_KEY = 'sm-session',
 
 export default function() {
   const { api, server } = simpla.config,
-        endpoint = `${server}/projects/${api}/usage`;
+        endpoint = `${server}/projects/${api}/sessions`;
 
   /**
    * Ping the server at the usage endpoint
