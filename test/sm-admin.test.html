@@ -303,6 +303,31 @@
             expect(window.localStorage.getItem('sm-session')).not.to.equal(current);
           });
         });
+
+        describe('simpla connection', function() {
+          it('should emit editing _editable true', function(done) {
+            Simpla.client.on('editing', done);
+            component._editable = true;
+          });
+
+          it('should emit viewing on _editable false', function(done) {
+            Simpla.client.on('viewing', done);
+            component._editable = false;
+          });
+
+          it('should be debounced', function() {
+            var count = 0;
+            Simpla.client.on('editing', function() {
+              count++;
+            });
+
+            component._editable = false;
+            component._editable = true;
+            component._editable = false;
+
+            expect(count).to.equal(1);
+          });
+        });
       });
     </script>
   </body>
