@@ -46,6 +46,7 @@
   <script>
     import clickEvents from './behaviors/clickEvents';
     import editMode from './behaviors/editMode';
+    import simplaConnector from './behaviors/simplaConnector';
     import { attachConfig, inject } from './lib/setup';
     import startMonitoring from './lib/usageMonitor';
     import isValidToken from './lib/isValidToken';
@@ -81,7 +82,7 @@
       }
 
       get behaviors() {
-        return [ editMode ];
+        return [ editMode, simplaConnector ];
       }
 
       ready() {

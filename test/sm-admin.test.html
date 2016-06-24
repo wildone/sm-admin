@@ -26,6 +26,12 @@
       window.simpla = {
         config: { server: 'https://api.simpla.io', api: 'project-id' }
       };
+
+      window.Simpla = {
+        client: {
+          emit: sinon.stub()
+        }
+      };
     </script>
 
     <!-- Import the element to test -->
@@ -301,6 +307,39 @@
 
             window.dispatchEvent(new Event('beforeunload'));
             expect(window.localStorage.getItem('sm-session')).not.to.equal(current);
+          });
+        });
+
+        describe('simpla connection', function() {
+          beforeEach(function() {
+            Simpla.client.emit.reset();
+          });
+
+          it('should emit editing _editable true', function() {
+            component._editable = false;
+            component._editable = true;
+
+            component.flushDebouncer('emitting-editing');
+            expect(Simpla.client.emit.calledWith('editing')).to.be.true;
+          });
+
+          it('should emit viewing on _editable false', function() {
+            component._editable = true;
+            component._editable = false;
+
+            component.flushDebouncer('emitting-viewing');
+            expect(Simpla.client.emit.calledWith('viewing')).to.be.true;
+          });
+
+          it('should be debounced', function() {
+            component._editable = false;
+            component._editable = true;
+            component._editable = false;
+            component._editable = true;
+
+            component.flushDebouncer('emitting-editing');
+            component.flushDebouncer('emitting-viewing');
+            expect(Simpla.client.emit.callCount).to.equal(2);
           });
         });
       });
