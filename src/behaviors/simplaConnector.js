@@ -7,10 +7,14 @@ export default {
   ],
 
   _emitEditingOrViewing(_editable) {
-    if (!(Simpla && Simpla.client && Simpla.client.emit)) {
+    let toEmit = _editable ? EDITING : VIEWING;
+
+    if (!(window.Simpla && window.Simpla.client && window.Simpla.client.emit)) {
       return;
     }
 
-    Simpla.client.emit(_editable ? EDITING : VIEWING);
+    this.debounce(`emitting-${toEmit}`, function() {
+      window.Simpla.client.emit(toEmit);
+    });
   }
 };
